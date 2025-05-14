@@ -1,5 +1,13 @@
 import * as React from "react";
 
-export function ReplaceAllButton() {
-	return <button className="document-search-button">Replace all</button>;
+interface ReplaceAllButtonProps {
+	onClick: () => void;
+}
+
+export function ReplaceAllButton({ onClick }: ReplaceAllButtonProps) {
+	return (
+		<button className="document-search-button" onClick={onClick}>
+			Replace all
+		</button>
+	);
 }

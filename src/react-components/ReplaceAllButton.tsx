@@ -1,13 +1,24 @@
 import * as React from "react";
+import { ReplaceAllButton } from "./ReplaceAllButton";
 
-interface ReplaceAllButtonProps {
-	onClick: () => void;
+interface ReplaceInputProps {
+	value: string;
+	onChange: React.ChangeEventHandler<HTMLInputElement>;
+	onReplaceAll?: () => void;
 }
 
-export function ReplaceAllButton({ onClick }: ReplaceAllButtonProps) {
+export function ReplaceInput({ value, onChange, onReplaceAll }: ReplaceInputProps) {
 	return (
-		<button className="document-search-button" onClick={onClick}>
-			Replace all
-		</button>
+		<div className="snr-input-button-wrapper">
+			<input
+				className="prompt-input"
+				enterKeyHint="go"
+				type="text"
+				placeholder="Replace"
+				value={value}
+				onChange={onChange}
+			/>
+			{onReplaceAll && <ReplaceAllButton onClick={onReplaceAll} />}
+		</div>
 	);
 }

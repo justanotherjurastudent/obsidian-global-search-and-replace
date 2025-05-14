@@ -1,11 +1,13 @@
 import * as React from "react";
+import { ReplaceAllButton } from "./ReplaceAllButton";
 
 interface ReplaceInputProps {
 	value: string;
 	onChange: React.ChangeEventHandler<HTMLInputElement>;
+	onReplaceAll?: () => void;
 }
 
-export function ReplaceInput({ value, onChange }: ReplaceInputProps) {
+export function ReplaceInput({ value, onChange, onReplaceAll }: ReplaceInputProps) {
 	return (
 		<div className="snr-input-button-wrapper">
 			<input
@@ -16,7 +18,7 @@ export function ReplaceInput({ value, onChange }: ReplaceInputProps) {
 				value={value}
 				onChange={onChange}
 			/>
-			{/* TODO <ReplaceAllButton />*/}
+			{onReplaceAll && <ReplaceAllButton onClick={onReplaceAll} />}
 		</div>
 	);
 }

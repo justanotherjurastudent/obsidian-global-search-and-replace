@@ -6,7 +6,8 @@ import { SearchAndReplaceAction } from "./SearchAndReplace";
 export function useBindObsidianEventHandlers(
 	dispatch: React.Dispatch<SearchAndReplaceAction>,
 	replaceSelection: () => Promise<void>,
-	openSelectionInEditor: () => Promise<void>
+	openSelectionInEditor: () => Promise<void>,
+	replaceAll: () => Promise<void>
 ) {
 	// Bind event handlers to events coming from Obsidian
 	useEffect(() => {
@@ -14,5 +15,6 @@ export function useBindObsidianEventHandlers(
 		eventBridge.onArrowDown = () => dispatch({ type: "move_selection_down" });
 		eventBridge.onEnter = replaceSelection;
 		eventBridge.onCommandEnter = openSelectionInEditor;
-	}, [replaceSelection, openSelectionInEditor, dispatch]);
+		eventBridge.onShiftEnter = replaceAll;
+	}, [replaceSelection, openSelectionInEditor, replaceAll, dispatch]);
 }

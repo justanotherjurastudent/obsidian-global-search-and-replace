@@ -1,20 +1,25 @@
 import * as React from "react";
-import { useEffect } from "react";
-import eventBridge from "../infrastructure/event-bridge";
-import { SearchAndReplaceAction } from "./SearchAndReplace";
+import { useCallback } from "react";
+import { FileOperator } from "../domain/file-operator";
+import { SearchAndReplaceAction, SearchAndReplaceState } from "./SearchAndReplace";
 
-export function useBindObsidianEventHandlers(
+export function useReplaceAll(
+	state: SearchAndReplaceState,
 	dispatch: React.Dispatch<SearchAndReplaceAction>,
-	replaceSelection: () => Promise<void>,
-	openSelectionInEditor: () => Promise<void>,
-	replaceAll: () => Promise<void>
+	fileOperator: FileOperator
 ) {
-	// Bind event handlers to events coming from Obsidian
-	useEffect(() => {
-		eventBridge.onArrowUp = () => dispatch({ type: "move_selection_up" });
-		eventBridge.onArrowDown = () => dispatch({ type: "move_selection_down" });
-		eventBridge.onEnter = replaceSelection;
-		eventBridge.onCommandEnter = openSelectionInEditor;
-		eventBridge.onShiftEnter = replaceAll;
-	}, [replaceSelection, openSelectionInEditor, replaceAll, dispatch]);
+	return useCallback(async () => {
+		if (state.searchResults.length === 0) return;
+
+		for (let i = 0; i < state.searchResults.length; i++) {
+			await fileOperator.replace(
+				state.searchResults[i],
+				state.replacementText,
+				state.searchQuery,
+				state.regexEnabled,
+				state.caseSensitivityEnabled
+			);
+		}
+		dispatch({ type: "clear" });
+	}, [dispatch, fileOperator, state]);
 }

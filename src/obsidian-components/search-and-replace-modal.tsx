@@ -56,6 +56,13 @@ export class SearchAndReplaceModal extends Modal {
 			eventBridge.onCommandEnter?.(e, ctx);
 			this.close();
 		});
+
+		// Replace all matches (Shift+Enter)
+		this.scope.register(["Shift"], "Enter", (e, ctx) => {
+			e.preventDefault();
+			if (e.repeat) return;
+			eventBridge.onShiftEnter?.(e, ctx);
+		});
 	}
 
 	onOpen() {

@@ -15,6 +15,10 @@ export function PromptInstructions(): JSX.Element {
 				<span className="prompt-instruction-command">⌘↵</span>
 				<span>to open</span>
 			</div>
+			<div className="prompt-instruction">
+				<span className="prompt-instruction-command">Shift+↵</span>
+				<span>to replace all</span>
+			</div>
 		</div>
 	);
 }

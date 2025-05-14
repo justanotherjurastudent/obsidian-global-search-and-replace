@@ -13,6 +13,7 @@ import { useScrollSelectedSearchResultIntoView } from "./use-scroll-selected-sea
 import { useOpenSelectionInEditor } from "./use-open-selection-in-editor";
 import { useBindObsidianEventHandlers } from "./use-bind-obsidian-event-handlers";
 import { useSearch } from "./use-search";
+import { useReplaceAll } from "./use-replace-all";
 
 const NUMBER_OF_RESULTS_TO_DISPLAY_PER_BATCH = 20;
 
@@ -163,13 +164,13 @@ export default function SearchAndReplace({ fileOperator }: SearchAndReplaceProps
 		numberOfFilesWithMatches: 0,
 	});
 
-
 	useSearch(state, dispatch, fileOperator);
 	useScrollSelectedSearchResultIntoView(state.selectedIndex);
 
 	const replaceSelection = useReplaceSelection(state, dispatch, fileOperator);
 	const openSelectionInEditor = useOpenSelectionInEditor(fileOperator, state);
-	useBindObsidianEventHandlers(dispatch, replaceSelection, openSelectionInEditor);
+	const replaceAll = useReplaceAll(state, dispatch, fileOperator);
+	useBindObsidianEventHandlers(dispatch, replaceSelection, openSelectionInEditor, replaceAll);
 
 	const handleReplaceInputChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
 		dispatch({ type: "update_replacement_text", nextReplacementText: event.target.value });
@@ -207,7 +208,7 @@ export default function SearchAndReplace({ fileOperator }: SearchAndReplaceProps
 				caseSensitivityEnabled={state.caseSensitivityEnabled}
 				onToggleCaseSensitiveSearch={handleToggleCaseSensitiveSearch}
 			/>
-			<ReplaceInput value={state.replacementText} onChange={handleReplaceInputChanged} />
+			<ReplaceInput value={state.replacementText} onChange={handleReplaceInputChanged} onReplaceAll={replaceAll} />
 			<SearchResultsContainer
 				searchResults={state.searchResults}
 				selectedIndex={state.selectedIndex}
